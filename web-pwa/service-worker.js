@@ -1,8 +1,11 @@
-const CACHE_NAME = "budgettt-v5";
+const CACHE_NAME = "budgettt-v6";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./assets/bg.png",
+  "./assets/icon-192.png",
+  "./assets/icon-512.png",
   "./app.js",
   "./manifest.json",
   "../core/money.js",
