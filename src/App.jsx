@@ -53,7 +53,7 @@ function App() {
             setFilter={setFilter}
           />
       )}
-      {activeTab === 'analytics' && <AnalyticsView />}
+      {activeTab === 'analytics' && <AnalyticsView transactions={transactions} />}
 
       {/* Global Add Modal */}
       {showAddModal && (
