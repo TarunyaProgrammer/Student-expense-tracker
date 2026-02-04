@@ -1,47 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTransactions } from '../hooks/useTransactions';
 import { formatMoney } from '../core/money';
 import { Sync } from '../core/sync';
 import { exportCSV } from '../core/export';
 import TransactionList from './TransactionList';
-import AnalyticsView from './AnalyticsView';
-import AIInsights from './AIInsights';
+import { Wallet, TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
 
-export default function Dashboard({ onLogout }) {
+export default function Dashboard({ onAddClick, transactions, refreshData }) {
   const { user } = useAuth();
-  const { 
-    transactions, 
-    filter, 
-    setFilter, 
-    addTransaction, 
-    deleteTransaction,
-    refreshData 
-  } = useTransactions(user);
-
-  const [type, setType] = useState('expense');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('others');
-  const [note, setNote] = useState('');
+  // useTransactions state is now passed in
   const [syncing, setSyncing] = useState(false);
-  const [showAnalytics, setShowAnalytics] = useState(false);
-  const [showAI, setShowAI] = useState(false);
 
   // Stats
   const totalIncome = transactions.reduce((acc, t) => t.type === 'income' ? acc + t.amount_paise : acc, 0);
   const totalExpense = transactions.reduce((acc, t) => t.type === 'expense' ? acc + t.amount_paise : acc, 0);
   
-  const handleAdd = async (e) => {
-    e.preventDefault();
-    try {
-        await addTransaction(amount, type, category, note);
-        setAmount('');
-        setNote('');
-    } catch(err) {
-        alert(err.message);
-    }
-  };
-
   const handleSync = async () => {
       setSyncing(true);
       try {
@@ -55,122 +29,64 @@ export default function Dashboard({ onLogout }) {
   };
 
   return (
-    <section id="dashboard-view" className="view">
-      <header>
-        <div className="logo">
-          Budgettt <span id="sync-status" className={`badge ${user ? 'online' : ''}`}>{user ? 'Online' : 'Offline'}</span>
+    <div className="view-dashboard">
+      {/* HEADER */}
+      <div className="dashboard-header">
+        <div>
+           <h1 className="page-title">Overview</h1>
+           <p className="text-muted">Welcome back!</p>
         </div>
-        <div className="actions">
-          {user && (
-            <button 
-                id="sync-btn" 
-                className={`icon-btn ${syncing ? 'spin' : ''}`} 
-                onClick={handleSync} 
-                title="Sync"
-            >
-                🔄
-            </button>
-          )}
-          <button id="ai-btn" className="icon-btn" onClick={() => setShowAI(true)} title="AI Insights">✨</button>
-          <button id="analytics-btn" className="icon-btn" onClick={() => setShowAnalytics(true)} title="Analytics">📊</button>
-          <button id="export-btn" className="icon-btn" onClick={exportCSV} title="Export">⬇️</button>
-          <button id="logout-btn" className="icon-btn" onClick={onLogout} title="Logout">🚪</button>
-        </div>
-      </header>
-
-      {/* SUMMARY CARD */}
-      <div className="summary-card">
-        <div className="total-balance">
-          <span className="label">Net Balance</span>
-          <span className="amount">{formatMoney(totalIncome - totalExpense)}</span>
-        </div>
-        <div className="stats-row">
-          <div className="stat income">
-            <span className="label">Incoming</span>
-            <span className="val">{formatMoney(totalIncome)}</span>
-          </div>
-          <div className="stat expense">
-            <span className="label">Outgoing</span>
-            <span className="val">{formatMoney(totalExpense)}</span>
-          </div>
+        <div className="actions" style={{display:'flex', gap:'10px'}}>
+             {user && (
+                <button onClick={handleSync} className={`btn-icon ${syncing ? 'spin' : ''}`} title="Sync">
+                    <RefreshCw size={20} className={syncing ? 'animate-spin' : ''} />
+                </button>
+             )}
+             <button onClick={onAddClick} className="btn-primary">
+                + Add Transaction
+             </button>
         </div>
       </div>
 
-      {/* QUICK ADD FORM */}
-      <div className="add-form-container">
-        <form onSubmit={handleAdd}>
-          <div className="amount-row">
-            <div className="toggle-group">
-              <input
-                type="radio"
-                name="type"
-                id="type-expense"
-                value="expense"
-                checked={type === 'expense'}
-                onChange={() => setType('expense')}
-              />
-              <label htmlFor="type-expense" className="toggle-btn expense">OUT</label>
-
-              <input 
-                type="radio" 
-                name="type" 
-                id="type-income" 
-                value="income"
-                checked={type === 'income'}
-                onChange={() => setType('income')}
-              />
-              <label htmlFor="type-income" className="toggle-btn income">IN</label>
+      {/* BALANCE CARD */}
+      <div className="card balance-card">
+        <div className="balance-label">Net Balance</div>
+        <div className="balance-amount">{formatMoney(totalIncome - totalExpense)}</div>
+        
+        <div className="stats-grid">
+            <div className="stat-item">
+                <div style={{display:'flex', alignItems:'center', gap:'8px', marginBottom:'4px'}}>
+                    <div className="icon-box" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-success)'}}>
+                        <TrendingUp size={18} />
+                    </div>
+                    <span className="text-muted" style={{fontSize:'0.85rem'}}>Income</span>
+                </div>
+                <div className="val text-success" style={{fontSize:'1.1rem', fontWeight:600}}>
+                    {formatMoney(totalIncome)}
+                </div>
             </div>
-            <input
-              type="number"
-              id="amount-input"
-              placeholder="0"
-              min="0"
-              step="any"
-              required
-              inputMode="decimal"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
 
-          <div className="details-row">
-            <select 
-                id="category-input" 
-                required
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="food">🍔 Food</option>
-              <option value="essentials">🧴 Essentials</option>
-              <option value="clothes">👕 Clothes</option>
-              <option value="fun">🎉 Fun</option>
-              <option value="others">📦 Others</option>
-            </select>
-            <input 
-                type="text" 
-                id="note-input" 
-                placeholder="Note (optional)" 
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-            />
-            <button type="submit" className="btn-submit">Add</button>
-          </div>
-        </form>
+            <div className="stat-item">
+                <div style={{display:'flex', alignItems:'center', gap:'8px', marginBottom:'4px'}}>
+                    <div className="icon-box" style={{background: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-danger)'}}>
+                        <TrendingDown size={18} />
+                    </div>
+                    <span className="text-muted" style={{fontSize:'0.85rem'}}>Expense</span>
+                </div>
+                <div className="val text-danger" style={{fontSize:'1.1rem', fontWeight:600}}>
+                    {formatMoney(totalExpense)}
+                </div>
+            </div>
+        </div>
       </div>
 
-      {/* FILTERS */}
-      <div className="filters">
-        <button className={`filter-chip ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</button>
-        <button className={`filter-chip ${filter === 'food' ? 'active' : ''}`} onClick={() => setFilter('food')}>Food</button>
-        <button className={`filter-chip ${filter === 'fun' ? 'active' : ''}`} onClick={() => setFilter('fun')}>Fun</button>
+      {/* RECENT TRANSACTIONS (Limit 5) */}
+      <div style={{marginBottom:'10px'}}>
+        <h3 style={{fontSize:'1rem', fontWeight:600, marginBottom:'10px'}}>Recent Activity</h3>
+        <TransactionList transactions={transactions.slice(0, 5)} onDelete={() => {}} />
       </div>
 
-      {/* TRANSACTION LIST */}
-      <TransactionList transactions={transactions} onDelete={deleteTransaction} />
-      
-      {showAnalytics && <AnalyticsView transactions={transactions} onClose={() => setShowAnalytics(false)} />}
-      {showAI && <AIInsights onClose={() => setShowAI(false)} />}
-    </section>
+    </div>
   );
 }
+
