@@ -1,209 +1,72 @@
 # 💸 Budgettt — The Ultimate Student Money Tracker
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
-![Status: Stable](https://img.shields.io/badge/Status-Stable-success)  
-![Platform: PWA](https://img.shields.io/badge/Platform-PWA%20%2B%20Extension%20%2B%20Web-blue)
+![Status: Active](https://img.shields.io/badge/Status-Active-success)  
+![Platform: Vercel](https://img.shields.io/badge/Platform-Vercel%20%2B%20React%20%2B%20Extension-blue)
 
 > **Secure. Offline-First. Privacy-Focused.**  
-> A lightning-fast money tracking system built specifically for **Indian Students** — to track every rupee without data leaching.
+> A lightning-fast money tracking system built specifically for **Indian Students** — now powered by React & Vercel.
 
 ---
 
-## 🧠 Why I Built This
+## 🚀 New Architecture (v2.0)
 
-Like most students, I struggled with:
+We have upgraded from a Vanilla JS PWA to a modern **React + Serverless** architecture:
 
-- ❌ Forgetting where my money actually went
-- ❌ Depending on random apps filled with ads & trackers
-- ❌ Internet not always being reliable
-- ❌ No fast way to add expenses while browsing
-
-I wanted something that was:
-
-✅ **Fast**  
-✅ **Works offline**  
-✅ **Privacy-first**  
-✅ **Simple & distraction-free**  
-✅ **Available as a mobile app, website & browser extension**
-
-So I built **Budgettt** — first to solve my own problem, and now to **help every student take control of their money without giving up privacy.**
+- **Frontend (`client/`)**: Built with React + Vite. Uses IndexedDB for 100% offline capability.
+- **Backend (`api/`)**: Express.js on Vercel Serverless Functions. Handles Sync & AI.
+- **Extension (`chrome-extension/`)**: Lightweight browser popup (Legacy Core).
 
 ---
 
-## ✨ What Makes Budgettt Special?
+## 🛠️ Tech Stack
 
-- 📱 **Mobile-First & Fully Responsive**  
-  Works perfectly on **phones, tablets & desktops**.
+### ⚙️ Frontend (React)
+- **Vite** for fast development.
+- **React** for UI components.
+- **Recharts** for analytics.
+- **Glassmorphism** design system.
 
-- ⚡ **100% Offline First (IndexedDB Powered)**  
-  Add, edit & view expenses without internet.
+### ☁️ Backend (API)
+- **Vercel Serverless** deployment.
+- **Firebase Admin** for secure Firestore access.
+- **Google Gemini AI** for financial insights.
 
-- ☁️ **Optional Cloud Sync**  
-  Firebase login only when YOU want backups.
-
-- 🧩 **Chrome Extension Included**  
-  Instantly add expenses while browsing with one click.
-
-- 🔒 **Privacy at the Core**  
-  Your data stays on your device unless you choose to sync.
-
-- 💸 **Paise-Based Math Engine**  
-  All values stored in integers for perfect accuracy.  
-  `₹100.00 → 10000 paise`
-
-- 🎨 **Minimal Dark UI**  
-  Clean and premium student-focused design.
+### 💾 Data
+- **Local:** IndexedDB (Offline First).
+- **Cloud:** Firebase Firestore (Sync).
 
 ---
 
-## 🧩 Platforms Included
+## 🏃‍♂️ Getting Started
 
-✅ **Progressive Web App (PWA)**  
-✅ **Chrome Extension**  
-✅ **Responsive Website (Mobile + Desktop Ready)**
-
-One project → Three powerful platforms 🚀
-
----
-
-## 🎥 Live Working Demo
-
-> Real-time working demo of Budgettt PWA & Chrome Extension.
-
-<video src="assets/budgettt-demo.mp4" controls width="100%"></video>
-
-✅ Replace the URL above after uploading your video via GitHub drag & drop.
-
----
-
-## 🚀 Getting Started (Web App / PWA)
-
-1. Open:
-   ```bash
-   web-pwa/index.html
-   ```
-2. Or run a local server:
-   ```bash
-   npx serve .
-   ```
-3. Click **“Install”** in the browser to use it like a native app.
-4. Start adding transactions immediately — **no login required!**
-
-✅ Fully works offline  
-✅ Sync only if you want
-
----
-
-## 🧩 Chrome Extension Setup
-
-1. Open Chrome:
-   ```
-   chrome://extensions
-   ```
-2. Enable **Developer Mode**
-3. Click **Load Unpacked**
-4. Select the `chrome-extension` folder
-5. **Pin it for instant access**
-
-Now you can add expenses without leaving any website 💨
-
----
-
-## 🛠️ Tech Stack & Architecture
-
-Built with **Pure Vanilla Web Technologies** — no frameworks, no bloat.
-
-### ⚙️ Frontend
-
-- HTML5
-- CSS3
-- ES6 JavaScript
-
-### 💾 Storage
-
-- **Local:** IndexedDB
-- **Cloud:** Firebase Firestore
-
-### 🧠 Core Architecture
-
-- Shared logic inside `/core`
-- Used by both:
-  - PWA
-  - Chrome Extension
-
-### 💸 Financial Engine
-
-- Integer-based calculations
-- No floating point bugs
-- Accurate monthly summaries
-
----
-
-## 📁 Project Structure
-
-```txt
-/core              → Shared database, auth & sync logic
-/web-pwa           → Main Progressive Web App
-/chrome-extension  → Lightweight browser popup
+### 1. Run the Client (UI)
+```bash
+cd client
+npm install
+npm run dev
 ```
+Access at `http://localhost:5173`.
 
-> ⚠️ Chrome Extensions need sandbox isolation, so `/core` is duplicated safely.
-
----
-
-## 👩‍💻 Who Is This For?
-
-- 🎓 College Students
-- 🧑‍💻 Developers learning:
-  - PWAs
-  - IndexedDB
-  - Browser Extensions
-  - Offline-first architecture
-- 🛡️ Privacy-conscious users
-- 🚀 Open-source contributors & GSoC aspirants
+### 2. Run the Backend (API)
+```bash
+cd api
+npm install
+node index.js
+```
+*Note: For full sync, you need a `FIREBASE_SERVICE_ACCOUNT` json in `api/.env`.*
 
 ---
 
-## 🌱 Open Source & Contributions
-
-This project is **fully open-source & beginner-friendly**.
-
-You can contribute by:
-
-- Improving UI/UX
-- Adding charts & analytics
-- UPI auto-expense detection
-- Multi-language support
-- AI-based monthly suggestions
-- Improving sync performance
-
-✨ Perfect for **Hackathons, GSoC prep & Open Source learning**
+## 🧩 Chrome Extension
+1. Open Chrome -> `chrome://extensions`
+2. Enable **Developer Mode**.
+3. **Load Unpacked** -> Select `chrome-extension/`.
 
 ---
 
-## 🔗 Repository
-
-GitHub Repo:  
-👉 https://github.com/TarunyaProgrammer/Student-expense-tracker
-
----
+## 👩‍💻 Contributing
+This project is open-source. Feel free to open PRs for new charts, AI prompts, or UI improvements!
 
 ## 📜 License
-
-This project is licensed under the **MIT License** — free to use, modify & distribute.
-
----
-
-## ❤️ Final Note
-
-This project started as a **personal struggle**, but my goal is bigger now:
-
-> 🎯 **To help students take control of their money without sacrificing privacy.**
-
-If this project helped you even a little:
-
-⭐ Star the repo  
-🍴 Fork it  
-🧑‍💻 Contribute to it
-
-Let’s build something impactful together 🚀
+MIT License.
