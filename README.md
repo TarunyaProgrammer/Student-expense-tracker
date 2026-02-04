@@ -70,7 +70,7 @@ One project → Three powerful platforms 🚀
 
 > Real-time working demo of Budgettt PWA & Chrome Extension.
 
-<video src="PASTE_YOUR_VIDEO_URL_HERE" controls width="100%"></video>
+<video src="assets/budgettt-demo.mp4" controls width="100%"></video>
 
 ✅ Replace the URL above after uploading your video via GitHub drag & drop.
 
